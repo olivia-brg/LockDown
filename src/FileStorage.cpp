@@ -21,8 +21,9 @@ vector<PasswordEntry> FileStorage::loadFile(const string& key, const string& pat
     ifstream file(path.c_str());
     vector<PasswordEntry> results;
     string line;
+
     while (getline(file, line)) {
-        string decipheredLine = decipherAES(line, key);
+        string decipheredLine = decryptAES(line, key);
         results.push_back(PasswordEntry::deserialize(decipheredLine));
     }
     file.close();

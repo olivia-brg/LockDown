@@ -5,32 +5,32 @@
 
 using namespace CryptoPP;
 
-string CryptoAES::encryptAES(const string& texte, const string& cle) {
-    string chiffre;
+string CryptoAES::encryptAES(const string& plaintext, const string& key) {
+    string ciphered;
     CryptoPP::byte iv[AES::BLOCKSIZE] = { 0 };
 
     CBC_Mode<AES>::Encryption enc;
-    enc.SetKeyWithIV((const CryptoPP::byte*)cle.data(), cle.size(), iv);
+    enc.SetKeyWithIV((const CryptoPP::byte*)key.data(), key.size(), iv);
 
-    StringSource(texte, true,
+    StringSource(plaintext, true,
         new StreamTransformationFilter(enc,
-            new StringSink(chiffre)
+            new StringSink(ciphered)
         )
     );
-    return chiffre;
+    return ciphered;
 }
 
-string CryptoAES::decipherAES(const string& chiffre, const string& cle) {
-    string clair;  
+string CryptoAES::decryptAES(const string& ciphertext, const string& key) {
+    string plaintext;
     CryptoPP::byte iv[AES::BLOCKSIZE] = { 0 };
 
     CBC_Mode<AES>::Decryption dec;
-    dec.SetKeyWithIV((const CryptoPP::byte*)cle.data(), cle.size(), iv);
+    dec.SetKeyWithIV((const CryptoPP::byte*)key.data(), key.size(), iv);
 
-    StringSource(chiffre, true,
+    StringSource(ciphertext, true,
         new StreamTransformationFilter(dec,
-            new StringSink(clair)
+            new StringSink(plaintext)
         )
     );
-    return clair;
+    return plaintext;
 }

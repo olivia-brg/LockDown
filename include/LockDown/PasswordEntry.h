@@ -7,11 +7,11 @@ using namespace std;
 
 class PasswordEntry {
     public:
-        PasswordEntry(const string& site, const string& username, const string& password);
+        PasswordEntry(string site, string username, string password);
 
-        string getSite() const;
-        string getUsername() const;
-        string getPassword() const;
+        const string getSite() const;
+        const string getUsername() const;
+        const string getPassword() const;
 
         void setPassword(const string& newPassword);
 

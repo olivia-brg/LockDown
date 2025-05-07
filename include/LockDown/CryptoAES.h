@@ -4,6 +4,6 @@
 using namespace std;
 
 namespace CryptoAES {
-    string encryptAES(const string& texte, const string& cle);
-    string decipherAES(const string& chiffre, const string& cle);
+    string encryptAES(const string& plaintext, const string& key);
+    string decryptAES(const string& ciphertext, const string& key);
 }

@@ -6,23 +6,23 @@
 int main()
 {
     // Clé de chiffrement simple (à remplacer plus tard par mot de passe maître)
-    string cle = "motDePasseMaitre";
+    string key = "motDePasseMaitre";
 
     // Fichier de sauvegarde
-    string chemin = "vault.dat";
+    string path = "vault.dat";
 
     // Création d'une liste d'entrées
-    vector<PasswordEntry> liste;
-    liste.emplace_back("site.com", "user1", "mdp123");
-    liste.emplace_back("gmail.com", "moi@gmail.com", "secret");
-    liste.emplace_back("github.com", "devuser", "gitpass");
+    PasswordEntry site1("site.com", "user1", "mdp123");
+    PasswordEntry site2("gmail.com", "moi@gmail.com", "secret");
+    PasswordEntry site3("github.com", "devuser", "gitpass");
 
     // Sauvegarde dans un fichier
-    FileStorage::saveFile(liste, cle, chemin);
-    cout << "Mots de passe enregistres dans '" << chemin << "' (chiffres)." << endl;
+	vector<PasswordEntry> entries = { site1, site2, site3 };
+	FileStorage::saveFile(entries, key, path);
+    cout << "Mots de passe enregistres dans '" << path << "' (chiffres)." << endl;
 
     // Chargement depuis le fichier
-    auto charge = FileStorage::loadFile(cle, chemin);
+    vector<PasswordEntry> charge = FileStorage::loadFile(key, path);
 
     cout << "\nContenu du fichier (dechiffre) :\n";
     for (const auto& e : charge) {
