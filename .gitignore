@@ -30,6 +30,8 @@
 *.exe
 *.out
 *.app
+
+# Generated files
 build/
 .vs/
 x64/
