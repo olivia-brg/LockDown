@@ -3,21 +3,22 @@
 #include <cryptopp/modes.h>
 #include <cryptopp/filters.h>
 
+
 using namespace CryptoPP;
 
 string CryptoAES::encryptAES(const string& plaintext, const string& key) {
-    string ciphered;
+    string ciphertext;
     CryptoPP::byte iv[AES::BLOCKSIZE] = { 0 };
 
     CBC_Mode<AES>::Encryption enc;
     enc.SetKeyWithIV((const CryptoPP::byte*)key.data(), key.size(), iv);
 
-    StringSource(plaintext, true,
+    StringSource source(plaintext, true,
         new StreamTransformationFilter(enc,
-            new StringSink(ciphered)
+            new StringSink(ciphertext)
         )
     );
-    return ciphered;
+    return ciphertext;
 }
 
 string CryptoAES::decryptAES(const string& ciphertext, const string& key) {
@@ -27,7 +28,7 @@ string CryptoAES::decryptAES(const string& ciphertext, const string& key) {
     CBC_Mode<AES>::Decryption dec;
     dec.SetKeyWithIV((const CryptoPP::byte*)key.data(), key.size(), iv);
 
-    StringSource(ciphertext, true,
+    StringSource source(ciphertext, true,
         new StreamTransformationFilter(dec,
             new StringSink(plaintext)
         )

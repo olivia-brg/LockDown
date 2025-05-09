@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "PasswordEntry.h"
+#include "LogEntry.h"
 
 
 using namespace std;
@@ -10,7 +10,7 @@ using namespace std;
 class FileStorage
 {
 	public :
-		static void saveFile(const vector<PasswordEntry>& entries, const string& key, const string& path);
-		static vector<PasswordEntry> loadFile(const string& key, const string& path);
+		static void saveFile(const vector<LogEntry>& entries, const string& key, const string& path);
+		static vector<LogEntry> loadFile(const string& key, const string& path);
 };
 
