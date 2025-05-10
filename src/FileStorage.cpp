@@ -6,9 +6,13 @@
 
 using namespace CryptoAES;
 
-void FileStorage::saveFile(const vector<LogEntry>& entries, const string& key, const string& path)
+bool FileStorage::saveFile(const vector<LogEntry>& entries, const string& key, const string& path)
 {
     ofstream file(path.c_str(), ios::binary);
+	if (!file) {
+		cerr << "saveFile : Erreur d'ouverture du fichier pour l'écriture : " << path << endl;
+		return false;
+	}
 
     for (const auto& entry : entries) {
         string line = entry.serialize();
@@ -21,11 +25,17 @@ void FileStorage::saveFile(const vector<LogEntry>& entries, const string& key, c
     }
 
     file.close();
+	return true;
 }
 
 vector<LogEntry> FileStorage::loadFile(const string& key, const string& path)
 {
     ifstream file(path.c_str(), ios::binary);
+	if (!file) {
+		cerr << "loadFile : Erreur d'ouverture du fichier pour la lecture : " << path << endl;
+		return {};
+	}
+
     vector<LogEntry> results;
     string base64Line;
 
@@ -50,4 +60,41 @@ vector<LogEntry> FileStorage::loadFile(const string& key, const string& path)
 
     file.close();
     return results;
+}
+
+bool FileStorage::saveUser(const UserAccount& user, const string& path) {
+	ofstream file(path.c_str(), ios::binary | ios::app);
+	if (!file) {
+		cerr << "saveUser : Erreur d'ouverture du fichier pour l'écriture : " << path << endl;
+		return false;
+	}
+	string line = user.username + ":" + user.password + "\n";
+	file.write(line.c_str(), line.size());
+	file.close();
+	return true;
+}
+
+vector<UserAccount> FileStorage::loadUsers(const string& path) {
+	ifstream file(path.c_str(), ios::binary);
+	if (!file) {
+		cerr << "loadUser : Erreur d'ouverture du fichier pour la lecture : " << path << endl;
+		return {};
+	}
+
+	vector<UserAccount> users;
+	string line;
+
+	while (getline(file, line)) {
+		if (line.empty()) continue;
+
+		size_t pos = line.find(':');
+		if (pos == string::npos) continue;
+
+		UserAccount user;
+		user.username = line.substr(0, pos);
+		user.password = line.substr(pos + 1);
+		users.push_back(user);
+	}
+	file.close();
+	return users;
 }

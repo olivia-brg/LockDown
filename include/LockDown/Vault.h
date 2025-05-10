@@ -17,8 +17,8 @@ class Vault {
 		void modifyPassword(const string& site, const string& newPassword);
 
 		void displayAllEntries() const;
-		void searchPasswordEntry(const string& site) const;
-		void save() const;
+		void searchLogEntry(const string& site) const;
+		bool save() const;
 		void load();
 		void clear();
 

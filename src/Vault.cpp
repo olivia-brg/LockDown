@@ -1,5 +1,5 @@
 #include "LockDown/Vault.h"
-#include "FileStorage.h"
+#include "LockDown/FileStorage.h"
 
 Vault::Vault(const string& key, const string& path)
 	: m_key{ key }, m_path{ path }
@@ -7,7 +7,7 @@ Vault::Vault(const string& key, const string& path)
 	m_entries = FileStorage::loadFile(m_key, m_path);
 }
 
-Vault::~Vault() { save();}
+Vault::~Vault() { save(); }
 
 void Vault::addLogEntry(const string& site, const string& username, const string& password) {
 	LogEntry newEntry(site, username, password);
@@ -50,7 +50,7 @@ void Vault::displayAllEntries() const {
 	}
 }
 
-void Vault::searchPasswordEntry(const string& site) const {
+void Vault::searchLogEntry(const string& site) const {
 	for (const auto& entry : m_entries) {
 		if (entry.getSite() == site) {
 			cout << entry << endl;
@@ -60,8 +60,8 @@ void Vault::searchPasswordEntry(const string& site) const {
 	cout << "Aucun site trouvée pour le libelle : " << site << endl;
 }
 
-void Vault::save() const {
-	FileStorage::saveFile(m_entries, m_key, m_path);
+bool Vault::save() const {
+	return FileStorage::saveFile(m_entries, m_key, m_path);
 }
 
 void Vault::load() {

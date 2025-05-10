@@ -1,8 +1,9 @@
 #include "LockDown/CryptoAES.h"
 #include <cryptopp/aes.h>
+#include <cryptopp/sha.h>
 #include <cryptopp/modes.h>
 #include <cryptopp/filters.h>
-
+#include <cryptopp/hex.h>
 
 using namespace CryptoPP;
 
@@ -34,4 +35,15 @@ string CryptoAES::decryptAES(const string& ciphertext, const string& key) {
         )
     );
     return plaintext;
+}
+
+string CryptoAES::hashPassword(const string& password) {
+    string digest;
+    SHA256 hash;
+
+    StringSource(password, true,
+        new HashFilter(hash, new StringSink(digest))
+    );
+
+    return digest;
 }
