@@ -1,48 +1,60 @@
 #include <LockDown/Controller.h>
-#include <iostream>
 #include <LockDown/MasterAuth.h>
 #include <LockDown/CryptoAES.h>
+#include <iostream>
+#include "../build/MY_GLOBALS_H.h"
+
+const string USER_DB = "users.dat";
 
 int main()
 {
-    const std::string userDb = "users.dat";
-
-    MasterAuth auth(userDb);
-
-
+    bool authenticated = false;
+    MasterAuth auth(USER_DB);
+    string username;
+    string password;
+    string hashedPass;
     UserAccount user;
-    std::cout << "Nom d'utilisateur : ";
-    std::getline(std::cin, user.username);
-    std::cout << "Mot de passe maître : ";
-    std::getline(std::cin, user.password);
 
-    bool authenticated = auth.authenticate(user);
+    while (!authenticated) {
 
-    if (!authenticated) {
-        std::cout << "Utilisateur inconnu. Créer un nouveau compte ? (y/n) : ";
-        std::string choix;
-        std::getline(std::cin, choix);
+        std::cout << "Nom d'utilisateur : ";
+        getline(cin, username);
+        std::cout << "Mot de passe maitre : ";
+        getline(cin, password);
 
-        if (choix == "y" || choix == "Y") {
-            if (!auth.registerUser(user)) {
-                std::cerr << "Erreur : utilisateur déjà existant." << std::endl;
-                return 1;
+        hashedPass = CryptoAES::hashPassword(password);
+        password = "";
+        user.m_username = username;
+        user.m_password = hashedPass;
+
+        authenticated = auth.authenticate(user);
+
+        if (!authenticated) {
+            std::cout << "Utilisateur inconnu. Creer un nouveau compte ? (y/n) : ";
+            string choix;
+            getline(cin, choix);
+
+            if (choix == "y" || choix == "Y") {
+                if (!auth.registerUser(user)) {
+                    cerr << "Erreur : utilisateur deja existant." << endl;
+                    return 1;
+                }
+                std::cout << "Compte cree avec succes.\n";
             }
-            std::cout << "Compte créé avec succès.\n";
+            else {
+                std::cout << "Entrez a nouveau vos identifiants.\n";
+
+            }
         }
         else {
-            std::cout << "Accès refusé.\n";
-            return 1;
+            std::cout << "Authentification reussie.\n";
         }
     }
-    else {
-        std::cout << "Authentification réussie.\n";
-    }
+        Controller controller(hashedPass, user.m_username);
+        hashedPass = "";
 
-    // Fichier de l'utilisateur : vault_username.dat
-    std::string vaultPath = "vaults/vault_" + user.username + ".dat";
-	string key = CryptoAES::hashPassword(user.password);
-    Controller controller(key, vaultPath);
+
+
 
     return 0;
 }

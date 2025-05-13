@@ -1,21 +1,8 @@
 #pragma once
 #include <string>
+#include "UserAccount.h"
 
 using namespace std;
-
-class UserAccount {
-	public:
-		string username;
-		string password;
-
-		UserAccount& operator=(const UserAccount& other) {
-			if (this != &other) {
-				username = other.username;
-				password = other.password;
-			}
-			return *this;
-		};
-};
 
 class MasterAuth {
 	public:

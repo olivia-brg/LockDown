@@ -41,7 +41,7 @@ string CryptoAES::hashPassword(const string& password) {
     string digest;
     SHA256 hash;
 
-    StringSource(password, true,
+    StringSource source(password, true,
         new HashFilter(hash, new StringSink(digest))
     );
 

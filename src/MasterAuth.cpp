@@ -16,18 +16,16 @@ bool MasterAuth::authenticate(const UserAccount& user) {
 	if (!file) return false;
 
 	string line;
-	string hashed = CryptoAES::hashPassword(user.password);
 
 	while (getline(file, line)) {
 		stringstream ss(line);
 		UserAccount storedUser;
 
-		if (!getline(ss, storedUser.username, ':')) continue;
-		if (!getline(ss, storedUser.password)) continue;
+		if (!getline(ss, storedUser.m_username, ':')) continue;
+		if (!getline(ss, storedUser.m_password)) continue;
 
-
-		if (storedUser.username == user.username && storedUser.password == hashed) {
-			m_user = { user.username, hashed };
+		if (storedUser.m_username == user.m_username && storedUser.m_password == user.m_password) {
+			m_user = { user.m_username, user.m_password };
 			return true;
 		}
 	}
@@ -43,15 +41,13 @@ bool MasterAuth::registerUser(const UserAccount& user) {
     while (getline(inFile, line)) {
         stringstream ss(line);
         string existingUser;
-        if (getline(ss, existingUser, ';') && existingUser == user.username) {
+        if (getline(ss, existingUser, ';') && existingUser == user.m_username) {
 			cout << "L'utilisateur existe deja." << endl;
             return false;
         }
     }
     inFile.close();
 
-    // Enregistre le nouvel utilisateur
-    string hashed = CryptoAES::hashPassword(user.password);
-	m_user = { user.username, hashed };
+	
 	return FileStorage::saveUser(m_user, m_path);
 }

@@ -1,16 +1,30 @@
+#include "LockDown/FileStorage.h"
+#include "LockDown/CryptoAES.h"
+#include "../build/MY_GLOBALS_H.h"
+
+
 #include <fstream>
 #include <cryptopp/hex.h>
 #include <cryptopp/base64.h>
-#include "LockDown/FileStorage.h"
-#include "LockDown/CryptoAES.h"
+#include <filesystem>
+
+
 
 using namespace CryptoAES;
 
-bool FileStorage::saveFile(const vector<LogEntry>& entries, const string& key, const string& path)
+bool FileStorage::saveFile(const vector<LogEntry>& entries, const string& key, const string& username)
 {
-    ofstream file(path.c_str(), ios::binary);
+	struct stat info;
+
+	if (!filesystem::is_directory(FOLDER_PATH))
+		filesystem::create_directories(FOLDER_PATH);
+
+	string vaultPath = FOLDER_PATH + "/vault_" + username + ".dat";
+
+
+	ofstream file(vaultPath.c_str(), ios::binary);
 	if (!file) {
-		cerr << "saveFile : Erreur d'ouverture du fichier pour l'écriture : " << path << endl;
+		cerr << "saveFile : Erreur d'ouverture du fichier pour l'écriture : " << vaultPath << endl;
 		return false;
 	}
 
@@ -28,11 +42,13 @@ bool FileStorage::saveFile(const vector<LogEntry>& entries, const string& key, c
 	return true;
 }
 
-vector<LogEntry> FileStorage::loadFile(const string& key, const string& path)
+vector<LogEntry> FileStorage::loadFile(const string& key, const string& username)
 {
-    ifstream file(path.c_str(), ios::binary);
+	string vaultPath = FOLDER_PATH + "/vault_" + username + ".dat";
+
+    ifstream file(vaultPath.c_str(), ios::binary);
 	if (!file) {
-		cerr << "loadFile : Erreur d'ouverture du fichier pour la lecture : " << path << endl;
+		cerr << "loadFile : Erreur d'ouverture du fichier pour la lecture : " << vaultPath << endl;
 		return {};
 	}
 
@@ -53,7 +69,7 @@ vector<LogEntry> FileStorage::loadFile(const string& key, const string& path)
             results.push_back(entry);
         }
         catch (const CryptoPP::Exception& e) {
-            cerr << "Erreur de déchiffrement : " << e.what() << "\n";
+            cerr << "Erreur de dechiffrement : " << e.what() << "\n";
             // Possibilité de continuer ou de stopper ici
         }
     }
@@ -68,7 +84,7 @@ bool FileStorage::saveUser(const UserAccount& user, const string& path) {
 		cerr << "saveUser : Erreur d'ouverture du fichier pour l'écriture : " << path << endl;
 		return false;
 	}
-	string line = user.username + ":" + user.password + "\n";
+	string line = user.m_username + ":" + user.m_password + "\n";
 	file.write(line.c_str(), line.size());
 	file.close();
 	return true;
@@ -90,9 +106,7 @@ vector<UserAccount> FileStorage::loadUsers(const string& path) {
 		size_t pos = line.find(':');
 		if (pos == string::npos) continue;
 
-		UserAccount user;
-		user.username = line.substr(0, pos);
-		user.password = line.substr(pos + 1);
+		UserAccount user(line.substr(0, pos), line.substr(pos + 1));
 		users.push_back(user);
 	}
 	file.close();

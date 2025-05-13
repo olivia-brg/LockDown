@@ -1,0 +1,24 @@
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 09a50471bfbda5b73880261514a9de543e0c83b2258baa44bec3933618caddea
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: c11ca4295213268139308f371bec5c6bd38b5389438fcae972bdb1438b6b91cd
+Status: install ok installed
+
+Package: cryptopp
+Version: 8.9.0
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: d6cd0fdd86ab5d21d764fc24282c2c09ab033eea5d4fa60a4771a0fa386862e8
+Description: Crypto++ is a free C++ class library of cryptographic schemes.
+Status: install ok installed
+
