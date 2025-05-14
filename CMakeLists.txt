@@ -8,10 +8,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
 
 # ====== SOURCES ======
-file(GLOB_RECURSE SOURCES "src/*.cpp")
-file(GLOB_RECURSE HEADERS "include/LockDown/*.h")
+file(GLOB_RECURSE SOURCES "src/cpp/*.cpp")
+file(GLOB_RECURSE HEADERS "src/headers/*.h")
+file(GLOB_RECURSE TESTS "src/tests/*.cpp")
 
-add_executable(LockDown ${SOURCES} ${HEADERS})
+add_executable(LockDown ${SOURCES} ${HEADERS} ${TESTS})
 
 # ====== INCLUDES ======
 target_include_directories(LockDown
@@ -26,3 +27,4 @@ target_link_libraries(LockDown PRIVATE cryptopp::cryptopp)
 # ====== GROUPS POUR VISUAL STUDIO ======
 source_group("Header Files" FILES ${HEADERS})
 source_group("Source Files" FILES ${SOURCES})
+source_group("Tests Files" FILES ${TESTS})

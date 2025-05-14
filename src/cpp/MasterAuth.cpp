@@ -1,9 +1,9 @@
-#include "LockDown/MasterAuth.h"
+#include "../headers/MasterAuth.h"
+#include "../headers/FileStorage.h"
+#include "../headers/CryptoAES.h"
 
 #include <iostream>
 #include <vector>
-#include <LockDown/FileStorage.h>
-#include <LockDown/CryptoAES.h>
 #include <fstream>
 #include <sstream>
 

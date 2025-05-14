@@ -1,10 +1,10 @@
-#include "LockDown/Vault.h"
-#include "LockDown/FileStorage.h"
+#include "../headers/Vault.h"
+#include "../headers/FileStorage.h"
 
-Vault::Vault(const string& key, const string& path)
-	: m_key{ key }, m_path{ path }
+Vault::Vault(const UserAccount& user)
+	: m_user{user}
 {
-	m_entries = FileStorage::loadFile(m_key, m_path);
+	m_entries = FileStorage::loadFile(m_user);
 }
 
 Vault::~Vault() { save(); }
@@ -61,11 +61,11 @@ void Vault::searchLogEntry(const string& site) const {
 }
 
 bool Vault::save() const {
-	return FileStorage::saveFile(m_entries, m_key, m_path);
+	return FileStorage::saveFile(m_entries, m_user);
 }
 
 void Vault::load() {
-	m_entries = FileStorage::loadFile(m_key, m_path);
+	m_entries = FileStorage::loadFile(m_user);
 }
 
 void Vault::clear() {

@@ -1,14 +1,14 @@
-#include "LockDown/Controller.h"
-#include "LockDown/LogEntry.h"
+#include "../headers/Controller.h"
+#include "../headers/LogEntry.h"
 #include <string>
 #include <iostream>
 
-Controller::Controller(string key, string path) : m_key{ move(key) }, m_path{ move(path) } {
-	start();
+Controller::Controller(const UserAccount& user) {
+	start(user);
 }
 
-void Controller::start() {
-    Vault vault(m_key, m_path);
+void Controller::start(const UserAccount& user) {
+    Vault vault(user);
     bool running = true;
 
     while (running) {
@@ -30,6 +30,7 @@ void Controller::showMenu() const {
     cout << "5. Modifier un libelle\n";
     cout << "6. Afficher tout\n";
     cout << "7. Rechercher un site grace au libelle\n";
+    cout << "8. Sauvegarder\n";
     cout << "0. Quitter\n";
     cout << "Choix : " ;
     
@@ -81,6 +82,9 @@ void Controller::handleChoice(int choice, Vault& vault, bool& running) const {
         cout << "Libelle a rechercher : ";
         getline(cin, site);
         vault.searchLogEntry(site);
+        break;
+    case 8:cout << "Sauvegarde" << endl;
+        vault.save();
         break;
     case 0:
         running = false;

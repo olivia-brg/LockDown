@@ -2,13 +2,14 @@
 
 #include <string>
 #include "LogEntry.h"
+#include "UserAccount.h"
 
 using namespace std;
 
 class Vault {
 
 	public:
-		Vault(const string& key, const string& path);
+		Vault(const UserAccount& user);
 		~Vault();
 		void addLogEntry(const string& site, const string& m_username, const string& password);
 		void removeLogEntry(const string& site);
@@ -23,7 +24,6 @@ class Vault {
 		void clear();
 
 	private:
-		string m_key;
-		string m_path;
+		UserAccount m_user;
 		vector<LogEntry> m_entries;
 };

@@ -1,20 +1,18 @@
 #pragma once
 #include <string>
 
-#include "LockDown/Vault.h"
+#include "Vault.h"
+#include "UserAccount.h"
 
 using namespace std;
 
 class Controller
 {
 	public:
-		Controller(string key, string path);
-		void start();
+		Controller(const UserAccount& user);
+		void start(const UserAccount& user);
 
 	private:
-		string m_key;
-		string m_path;
-
 		void showMenu() const;
 		void handleChoice(int choice, Vault& vault, bool& running) const;
 };

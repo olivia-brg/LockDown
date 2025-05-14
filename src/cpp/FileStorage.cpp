@@ -1,6 +1,6 @@
-#include "LockDown/FileStorage.h"
-#include "LockDown/CryptoAES.h"
-#include "../build/MY_GLOBALS_H.h"
+#include "../headers/FileStorage.h"
+#include "../headers/CryptoAES.h"
+#include "../MY_GLOBALS_H.h"
 
 
 #include <fstream>
@@ -12,14 +12,14 @@
 
 using namespace CryptoAES;
 
-bool FileStorage::saveFile(const vector<LogEntry>& entries, const string& key, const string& username)
+bool FileStorage::saveFile(const vector<LogEntry>& entries, const UserAccount& user)
 {
 	struct stat info;
 
 	if (!filesystem::is_directory(FOLDER_PATH))
 		filesystem::create_directories(FOLDER_PATH);
 
-	string vaultPath = FOLDER_PATH + "/vault_" + username + ".dat";
+	string vaultPath = FOLDER_PATH + "/vault_" + user.m_username+ ".dat";
 
 
 	ofstream file(vaultPath.c_str(), ios::binary);
@@ -30,7 +30,7 @@ bool FileStorage::saveFile(const vector<LogEntry>& entries, const string& key, c
 
     for (const auto& entry : entries) {
         string line = entry.serialize();
-        string encrypted = encryptAES(line, key);
+        string encrypted = encryptAES(line, user.m_password);
         string base64;
         CryptoPP::StringSource ss(encrypted, true,
             new CryptoPP::Base64Encoder(new CryptoPP::StringSink(base64), false) // false = pas de line breaks
@@ -42,9 +42,9 @@ bool FileStorage::saveFile(const vector<LogEntry>& entries, const string& key, c
 	return true;
 }
 
-vector<LogEntry> FileStorage::loadFile(const string& key, const string& username)
+vector<LogEntry> FileStorage::loadFile(const UserAccount& user)
 {
-	string vaultPath = FOLDER_PATH + "/vault_" + username + ".dat";
+	string vaultPath = FOLDER_PATH + "/vault_" + user.m_username + ".dat";
 
     ifstream file(vaultPath.c_str(), ios::binary);
 	if (!file) {
@@ -64,7 +64,7 @@ vector<LogEntry> FileStorage::loadFile(const string& key, const string& username
                 new CryptoPP::Base64Decoder(new CryptoPP::StringSink(encrypted))
             );
 
-            string decrypted = decryptAES(encrypted, key);
+            string decrypted = decryptAES(encrypted, user.m_password);
             LogEntry entry = LogEntry::deserialize(decrypted);
             results.push_back(entry);
         }

@@ -8,9 +8,6 @@ class UserAccount {
 		UserAccount() {};
 		UserAccount(string username, string password) : m_username{ move(username) }, m_password{ move(password) } {};
 
-		string m_username;
-		string m_password;
-
 		UserAccount& operator=(const UserAccount& other) {
 			
 				m_username = other.m_username;
@@ -18,4 +15,8 @@ class UserAccount {
 			
 			return *this;
 		};
+
+	//private:
+		string m_username;
+		string m_password;
 };

@@ -1,8 +1,8 @@
-#include <LockDown/Controller.h>
-#include <LockDown/MasterAuth.h>
-#include <LockDown/CryptoAES.h>
+#include "../headers/Controller.h"
+#include "../headers/MasterAuth.h"
+#include "../headers/CryptoAES.h"
+#include "../MY_GLOBALS_H.h"
 #include <iostream>
-#include "../build/MY_GLOBALS_H.h"
 
 const string USER_DB = "users.dat";
 
@@ -43,14 +43,13 @@ int main()
             }
             else {
                 std::cout << "Entrez a nouveau vos identifiants.\n";
-
             }
         }
         else {
             std::cout << "Authentification reussie.\n";
         }
     }
-        Controller controller(hashedPass, user.m_username);
+        Controller controller(user);
         hashedPass = "";
 
 

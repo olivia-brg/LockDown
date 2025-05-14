@@ -1,7 +1,7 @@
 #include <sstream>
 #include <iostream>
 
-#include "LockDown/LogEntry.h"
+#include "../headers/LogEntry.h"
 
 
 LogEntry::LogEntry(string site, string username, string password)
