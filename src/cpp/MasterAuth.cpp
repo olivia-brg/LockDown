@@ -19,13 +19,14 @@ bool MasterAuth::authenticate(const UserAccount& user) {
 
 	while (getline(file, line)) {
 		stringstream ss(line);
-		UserAccount storedUser;
+		string storedUsername;
+		string storedPassword;
 
-		if (!getline(ss, storedUser.m_username, ':')) continue;
-		if (!getline(ss, storedUser.m_password)) continue;
+		if (!getline(ss, storedUsername, ':')) continue;
+		if (!getline(ss, storedPassword)) continue;
 
-		if (storedUser.m_username == user.m_username && storedUser.m_password == user.m_password) {
-			m_user = { user.m_username, user.m_password };
+		if (storedUsername == user.getUsername() && storedPassword == user.getPassword()) {
+			m_user = { user.getUsername(), user.getPassword() };
 			return true;
 		}
 	}
@@ -41,7 +42,7 @@ bool MasterAuth::registerUser(const UserAccount& user) {
     while (getline(inFile, line)) {
         stringstream ss(line);
         string existingUser;
-        if (getline(ss, existingUser, ';') && existingUser == user.m_username) {
+        if (getline(ss, existingUser, ';') && existingUser == user.getUsername()) {
 			cout << "L'utilisateur existe deja." << endl;
             return false;
         }
@@ -49,5 +50,5 @@ bool MasterAuth::registerUser(const UserAccount& user) {
     inFile.close();
 
 	
-	return FileStorage::saveUser(m_user, m_path);
+	return FileStorage::saveUser(user, m_path);
 }

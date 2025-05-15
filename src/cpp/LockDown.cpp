@@ -1,6 +1,7 @@
 #include "../headers/Controller.h"
 #include "../headers/MasterAuth.h"
 #include "../headers/CryptoAES.h"
+#include "../headers/UserAccount.h"
 #include "../MY_GLOBALS_H.h"
 #include <iostream>
 
@@ -12,7 +13,6 @@ int main()
     MasterAuth auth(USER_DB);
     string username;
     string password;
-    string hashedPass;
     UserAccount user;
 
     while (!authenticated) {
@@ -22,10 +22,10 @@ int main()
         std::cout << "Mot de passe maitre : ";
         getline(cin, password);
 
-        hashedPass = CryptoAES::hashPassword(password);
+        
+        user.setUsername(username);
+        user.setPassword(password);
         password = "";
-        user.m_username = username;
-        user.m_password = hashedPass;
 
         authenticated = auth.authenticate(user);
 
@@ -50,7 +50,6 @@ int main()
         }
     }
         Controller controller(user);
-        hashedPass = "";
 
 
 

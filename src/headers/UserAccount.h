@@ -1,22 +1,21 @@
 #pragma once
 #include <string>
-using namespace std;
+#include "./CryptoAES.h"
 
+using namespace std;
 
 class UserAccount {
 	public:
-		UserAccount() {};
-		UserAccount(string username, string password) : m_username{ move(username) }, m_password{ move(password) } {};
+		UserAccount();
+		UserAccount(string username, string password);
 
-		UserAccount& operator=(const UserAccount& other) {
-			
-				m_username = other.m_username;
-				m_password = other.m_password;
-			
-			return *this;
-		};
+		string getPassword() const;
+		void setPassword(string password);
 
-	//private:
+		string getUsername() const;
+		void setUsername(string username);
+
+	private:
 		string m_username;
 		string m_password;
 };

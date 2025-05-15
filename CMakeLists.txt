@@ -23,6 +23,7 @@ target_include_directories(LockDown
 # ====== Crypto++ ======
 find_package(cryptopp CONFIG REQUIRED)
 target_link_libraries(LockDown PRIVATE cryptopp::cryptopp)
+target_include_directories(LockDown PRIVATE ${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/include)
 
 # ====== GROUPS POUR VISUAL STUDIO ======
 source_group("Header Files" FILES ${HEADERS})
