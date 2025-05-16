@@ -10,23 +10,23 @@ Using VCPKG and CMake
 - Install:
   - [CMake](https://cmake.org/download/)
   - [VCPKG](https://github.com/microsoft/vcpkg)
-  - Crypto++ library (via VCPKG: `vcpkg install cryptopp`)
+  - Crypto++ library (via VCPKG)
 
 - Set environment variable:
   - Variable: `VCPKG_ROOT` | `C:\path\to\vcpkg`
 - Add to Path:
   - `%VCPKG_ROOT%`
 
-- First build: execute `"vcpkg install cryptopp:x64-windows"`
+- First build: execute `"vcpkg install cryptopp"`
 
 ### General Instructions
 
 1. Launch PowerShell
 2. Navigate to the build directory
 3. Execute the command:
-	cmake .. -DCMAKE_TOOLCHAIN_FILE="\$env\:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE=Debug
+	`cmake .. -DCMAKE_TOOLCHAIN_FILE="\$env\:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE=Debug`
 4. Execute the command:
-	cmake --build . --config Debug
+	`cmake --build . --config Debug`
 
 ### Troubleshooting
 
